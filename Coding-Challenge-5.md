@@ -135,4 +135,4 @@ alpha_long <- alpha_average2 %>%
 
 ![](Coding-Challenge-5_files/figure-latex/unnamed-chunk-7-1.pdf)<!-- --> 
 
-7) Here is a [clickable link to GitHub](https://github.com/Dustyn-T-Lewis/Coding-Challenge-5)
+7) Here is a link to GitHub: https://github.com/Dustyn-T-Lewis/Coding-Challenge-5

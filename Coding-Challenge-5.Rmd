@@ -72,4 +72,4 @@ alpha_long <- alpha_average2 %>%
       )
 ```
 
-7) Here is a [clickable link to GitHub](https://github.com/Dustyn-T-Lewis/Coding-Challenge-5)
+7) Here is a link to GitHub: https://github.com/Dustyn-T-Lewis/Coding-Challenge-5
