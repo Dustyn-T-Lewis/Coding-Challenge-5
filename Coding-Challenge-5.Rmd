@@ -1,0 +1,75 @@
+---
+title: "Data Wrangling Coding Challenge"
+author: "Dustyn Lewis"
+date: "2025-03-25"
+output:
+  pdf_document:
+    keep_md: yes
+---
+Load the required libraries
+
+```{r}
+library(tidyverse)
+getwd()
+```
+
+1) Read in the CSV files
+
+```{r}
+diversity <- read.csv("DiversityData.csv")
+metadata <- read.csv("MetaData.csv")
+```
+
+2) Join the two data frames by common column "code"
+
+```{r}
+alpha <- left_join(diversity, metadata, by = "Code")
+```
+
+3) Calculate Pielou's eveness index (*Shannon*/log(*Richness*))
+
+```{r}
+alpha_even <- alpha %>%
+  mutate(even = shannon/log(richness))
+```
+
+4) Summarize mean and standard error of evenness grouped by *Crop* over *Time_Point*
+
+```{r}
+alpha_average <- alpha_even %>%
+  group_by(Crop, Time_Point) %>%
+  summarize(  
+    mean.even = mean(even, na.rm = TRUE), 
+    n=n(), 
+    sd.even = sd(even, na.rm = TRUE), 
+    se.even = sd.even/sqrt(n) ) %>%
+  print()
+```
+
+5) Calculate differences between crops (Soil - Cotton, Soil - Soybean) for evenness
+
+```{r}
+alpha_average2 <- alpha_average %>%
+  select(Crop:mean.even) %>%
+  pivot_wider(names_from = Crop, values_from = mean.even) %>%
+  mutate(diff.cotton.even = Soil - Cotton, diff.soybean.even = Soil - Soybean) %>%
+  print()
+```
+
+6) Creating plots to compare differences over *Time_Point*
+
+```{r}
+alpha_long <- alpha_average2 %>%
+  select(Time_Point, diff.cotton.even, diff.soybean.even) %>%
+  pivot_longer( cols = c(diff.cotton.even, diff.soybean.even), 
+               names_to = "diff", values_to = "values" ) 
+  ggplot(alpha_long, aes(x = Time_Point, y = values, color = diff)) +
+    geom_line() +
+    labs( 
+      title = "Difference in Evenness Over Time", 
+      x = "Time Point", 
+      y = "Difference in Evenness"
+      )
+```
+
+7) Here is a [clickable link to GitHub](https://github.com/Dustyn-T-Lewis/Coding-Challenge-5)
